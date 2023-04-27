@@ -132,6 +132,14 @@
             <artifactId>javax.servlet-api</artifactId>
         </dependency>
 
+        <!-- mybatis-plus 增强CRUD 20230427-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.4.2</version>
+        </dependency>
+
+
     </dependencies>
 
 </project>
