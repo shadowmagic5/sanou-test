@@ -11,7 +11,7 @@ spring:
 #                username: root
 #                password: 1234
             master:
-                url: jdbc:sqlserver://localhost:1433;DatabaseName=ruoyi
+                url: jdbc:sqlserver://localhost:1433;DatabaseName=luqiao
                 username: sa
                 password: Sanou.123
             # 从库数据源
