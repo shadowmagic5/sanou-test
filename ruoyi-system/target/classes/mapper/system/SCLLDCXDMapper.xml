@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SCLLDCXDMapper">
+
+    <resultMap type="SCLLDCXD" id="SCLLDCXDResult">
+        <result property="name"    column="Name"    />
+        <result property="businessdate"    column="businessdate"    />
+        <result property="issuetype"    column="issuetype"    />
+        <result property="docno"    column="DocNo"    />
+        <result property="createdby"    column="CreatedBy"    />
+        <result property="whcode"    column="whcode"    />
+        <result property="deptcode"    column="deptcode"    />
+        <result property="deptname"    column="deptname"    />
+        <result property="itemcode"    column="itemcode"    />
+        <result property="itemname"    column="itemname"    />
+        <result property="specs"    column="SPECS"    />
+        <result property="uom"    column="uom"    />
+        <result property="issuedqty"    column="IssuedQty"    />
+        <result property="modocno"    column="modocno"    />
+        <result property="lotmaster"    column="LotMaster"    />
+        <result property="lsxh"    column="lsxh"    />
+        <result property="projectcode"    column="projectcode"    />
+        <result property="productcode"    column="productcode"    />
+        <result property="docstate"    column="docstate"    />
+        <result property="approveby"    column="ApproveBy"    />
+        <result property="businesscreatedon"    column="BusinessCreatedOn"    />
+        <result property="issueitemon"    column="IssueItemOn"    />
+        <result property="actualissuedate"    column="ActualIssueDate"    />
+        <result property="cwcategory"    column="cwCategory"    />
+        <result property="modoctype"    column="modoctype"    />
+    </resultMap>
+
+    <sql id="selectSCLLDCXDVo">
+        select Name, businessdate, issuetype, DocNo, CreatedBy, whcode, deptcode, deptname, itemcode, itemname, SPECS,
+               uom, IssuedQty, modocno, LotMaster, lsxh, projectcode, productcode, docstate, ApproveBy,
+               BusinessCreatedOn, IssueItemOn, ActualIssueDate, cwCategory, modoctype
+        from
+            ( SELECT TOP 1
+		c1.Name,
+                      CONVERT(DATE, a.BusinessDate, 110) businessdate,
+                     CASE a.IssueType
+                         WHEN 0 THEN
+                             '发料'
+                         WHEN 1 THEN
+                             '退料'
+                         WHEN 2 THEN
+                             '挪料'
+                         WHEN 3 THEN
+                             '超额'
+                         ELSE
+                             '其他'
+                         END issuetype,
+                     a.DocNo,
+                     a.CreatedBy,
+                     d.Code whcode,
+                     f.Code deptcode,
+                     f1.Name deptname,
+                     g.Code itemcode,
+                     g.Name itemname,
+                     g.SPECS,
+                     h.ShortName uom,
+                     b.IssuedQty,
+                     e.DocNo modocno,
+                     b.LotMaster,
+                     k.Name lsxh,
+                     l.Code projectcode,
+                     m.Code productcode,
+                     CASE a.DocState
+                         WHEN 0 THEN
+                             '开立'
+                         WHEN 1 THEN
+                             '已核准'
+                         WHEN 2 THEN
+                             '关闭'
+                         WHEN 3 THEN
+                             '核准中'
+                         ELSE
+                             '其他'
+                         END docstate,
+                     a.ApproveBy,
+                     CONVERT(DATE, a.BusinessCreatedOn, 110) BusinessCreatedOn,
+                     a.IssueItemOn,
+                     CONVERT(DATE, b.ActualIssueDate, 110) ActualIssueDate,
+                     o.Name cwCategory,
+                     p.Name modoctype
+              FROM u9.Sanou.dbo.MO_IssueDoc a,
+                   u9.Sanou.dbo.MO_IssueDocLine b,
+                   u9.Sanou.dbo.MO_IssueDocType c,
+                   u9.Sanou.dbo.MO_IssueDocType_Trl c1,
+                   u9.Sanou.dbo.CBO_Wh d,
+                   u9.Sanou.dbo.MO_MO e,
+                   u9.Sanou.dbo.CBO_Department f,
+                   u9.Sanou.dbo.CBO_Department_Trl f1,
+                   u9.Sanou.dbo.CBO_ItemMaster g,
+                   u9.Sanou.dbo.Base_UOM h,
+                   u9.Sanou.dbo.Base_DefineValue j,
+                   u9.Sanou.dbo.Base_DefineValue_Trl k,
+                   u9.Sanou.dbo.CBO_Project l,
+                   u9.Sanou.dbo.CBO_ItemMaster m,
+                   u9.Sanou.dbo.CBO_ItemCategory n,
+                   u9.Sanou.dbo.CBO_Category_Trl o,
+                   u9.Sanou.dbo.MO_MODocType_Trl p
+              WHERE 1 = 1
+                AND a.ID = b.IssueDoc
+                AND a.IssueDocType = c.ID
+                AND c.ID = c1.ID
+                AND b.Wh = d.ID
+                AND b.MO = e.ID
+                AND e.Department = f.ID
+                AND f.ID = f1.ID
+                AND b.Item = g.ID
+                AND b.IssueUOM = h.ID
+                AND e.DescFlexField_PrivateDescSeg1 = j.Code
+                AND j.ID = k.ID
+                AND e.Project = l.ID
+                AND e.ItemMaster = m.ID
+                AND b.Item = n.Item
+                AND n.Category = o.ID
+                AND e.MODocType = p.ID
+                AND j.ValueSetDef = 1001807040001608
+                AND c1.SysMLFlag = 'zh-CN'
+                AND f1.SysMLFlag = 'zh-CN'
+                AND p.SysMLFlag = 'zh-CN'
+                AND g.Org = 1001806220110073
+                AND m.Org = 1001806220110073
+                AND n.CategoryKind = 8)SCLLDCXD
+    </sql>
+
+    <select id="selectSCLLDCXDList" parameterType="SCLLDCXD" resultMap="SCLLDCXDResult">
+        <include refid="selectSCLLDCXDVo"/>
+        <where>
+            <if test="name != null  and name != ''"> and Name like concat('%', #{name}, '%')</if>
+            <if test="businessdate != null "> and businessdate = #{businessdate}</if>
+            <if test="issuetype != null  and issuetype != ''"> and issuetype = #{issuetype}</if>
+            <if test="docno != null  and docno != ''"> and DocNo = #{docno}</if>
+            <if test="createdby != null  and createdby != ''"> and CreatedBy = #{createdby}</if>
+            <if test="whcode != null  and whcode != ''"> and whcode = #{whcode}</if>
+            <if test="deptcode != null  and deptcode != ''"> and deptcode = #{deptcode}</if>
+            <if test="deptname != null  and deptname != ''"> and deptname like concat('%', #{deptname}, '%')</if>
+            <if test="itemcode != null  and itemcode != ''"> and itemcode = #{itemcode}</if>
+            <if test="itemname != null  and itemname != ''"> and itemname like concat('%', #{itemname}, '%')</if>
+            <if test="specs != null  and specs != ''"> and SPECS = #{specs}</if>
+            <if test="uom != null  and uom != ''"> and uom = #{uom}</if>
+            <if test="issuedqty != null  and issuedqty != ''"> and IssuedQty = #{issuedqty}</if>
+            <if test="modocno != null  and modocno != ''"> and modocno = #{modocno}</if>
+            <if test="lotmaster != null "> and LotMaster = #{lotmaster}</if>
+            <if test="lsxh != null  and lsxh != ''"> and lsxh = #{lsxh}</if>
+            <if test="projectcode != null  and projectcode != ''"> and projectcode = #{projectcode}</if>
+            <if test="productcode != null  and productcode != ''"> and productcode = #{productcode}</if>
+            <if test="docstate != null  and docstate != ''"> and docstate = #{docstate}</if>
+            <if test="approveby != null  and approveby != ''"> and ApproveBy = #{approveby}</if>
+            <if test="businesscreatedon != null "> and BusinessCreatedOn = #{businesscreatedon}</if>
+            <if test="issueitemon != null "> and IssueItemOn = #{issueitemon}</if>
+            <if test="actualissuedate != null "> and ActualIssueDate = #{actualissuedate}</if>
+            <if test="cwcategory != null  and cwcategory != ''"> and cwCategory = #{cwcategory}</if>
+            <if test="modoctype != null  and modoctype != ''"> and modoctype = #{modoctype}</if>
+        </where>
+    </select>
+
+    <select id="selectSCLLDCXDByName" parameterType="String" resultMap="SCLLDCXDResult">
+        <include refid="selectSCLLDCXDVo"/>
+        where Name = #{name}
+    </select>
+
+    <insert id="insertSCLLDCXD" parameterType="SCLLDCXD">
+        insert into SCLLDCXD
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">Name,</if>
+            <if test="businessdate != null">businessdate,</if>
+            <if test="issuetype != null">issuetype,</if>
+            <if test="docno != null">DocNo,</if>
+            <if test="createdby != null">CreatedBy,</if>
+            <if test="whcode != null">whcode,</if>
+            <if test="deptcode != null">deptcode,</if>
+            <if test="deptname != null">deptname,</if>
+            <if test="itemcode != null">itemcode,</if>
+            <if test="itemname != null">itemname,</if>
+            <if test="specs != null">SPECS,</if>
+            <if test="uom != null">uom,</if>
+            <if test="issuedqty != null">IssuedQty,</if>
+            <if test="modocno != null">modocno,</if>
+            <if test="lotmaster != null">LotMaster,</if>
+            <if test="lsxh != null">lsxh,</if>
+            <if test="projectcode != null">projectcode,</if>
+            <if test="productcode != null">productcode,</if>
+            <if test="docstate != null">docstate,</if>
+            <if test="approveby != null">ApproveBy,</if>
+            <if test="businesscreatedon != null">BusinessCreatedOn,</if>
+            <if test="issueitemon != null">IssueItemOn,</if>
+            <if test="actualissuedate != null">ActualIssueDate,</if>
+            <if test="cwcategory != null">cwCategory,</if>
+            <if test="modoctype != null">modoctype,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="businessdate != null">#{businessdate},</if>
+            <if test="issuetype != null">#{issuetype},</if>
+            <if test="docno != null">#{docno},</if>
+            <if test="createdby != null">#{createdby},</if>
+            <if test="whcode != null">#{whcode},</if>
+            <if test="deptcode != null">#{deptcode},</if>
+            <if test="deptname != null">#{deptname},</if>
+            <if test="itemcode != null">#{itemcode},</if>
+            <if test="itemname != null">#{itemname},</if>
+            <if test="specs != null">#{specs},</if>
+            <if test="uom != null">#{uom},</if>
+            <if test="issuedqty != null">#{issuedqty},</if>
+            <if test="modocno != null">#{modocno},</if>
+            <if test="lotmaster != null">#{lotmaster},</if>
+            <if test="lsxh != null">#{lsxh},</if>
+            <if test="projectcode != null">#{projectcode},</if>
+            <if test="productcode != null">#{productcode},</if>
+            <if test="docstate != null">#{docstate},</if>
+            <if test="approveby != null">#{approveby},</if>
+            <if test="businesscreatedon != null">#{businesscreatedon},</if>
+            <if test="issueitemon != null">#{issueitemon},</if>
+            <if test="actualissuedate != null">#{actualissuedate},</if>
+            <if test="cwcategory != null">#{cwcategory},</if>
+            <if test="modoctype != null">#{modoctype},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSCLLDCXD" parameterType="SCLLDCXD">
+        update SCLLDCXD
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="businessdate != null">businessdate = #{businessdate},</if>
+            <if test="issuetype != null">issuetype = #{issuetype},</if>
+            <if test="docno != null">DocNo = #{docno},</if>
+            <if test="createdby != null">CreatedBy = #{createdby},</if>
+            <if test="whcode != null">whcode = #{whcode},</if>
+            <if test="deptcode != null">deptcode = #{deptcode},</if>
+            <if test="deptname != null">deptname = #{deptname},</if>
+            <if test="itemcode != null">itemcode = #{itemcode},</if>
+            <if test="itemname != null">itemname = #{itemname},</if>
+            <if test="specs != null">SPECS = #{specs},</if>
+            <if test="uom != null">uom = #{uom},</if>
+            <if test="issuedqty != null">IssuedQty = #{issuedqty},</if>
+            <if test="modocno != null">modocno = #{modocno},</if>
+            <if test="lotmaster != null">LotMaster = #{lotmaster},</if>
+            <if test="lsxh != null">lsxh = #{lsxh},</if>
+            <if test="projectcode != null">projectcode = #{projectcode},</if>
+            <if test="productcode != null">productcode = #{productcode},</if>
+            <if test="docstate != null">docstate = #{docstate},</if>
+            <if test="approveby != null">ApproveBy = #{approveby},</if>
+            <if test="businesscreatedon != null">BusinessCreatedOn = #{businesscreatedon},</if>
+            <if test="issueitemon != null">IssueItemOn = #{issueitemon},</if>
+            <if test="actualissuedate != null">ActualIssueDate = #{actualissuedate},</if>
+            <if test="cwcategory != null">cwCategory = #{cwcategory},</if>
+            <if test="modoctype != null">modoctype = #{modoctype},</if>
+        </trim>
+        where Name = #{name}
+    </update>
+
+    <delete id="deleteSCLLDCXDByName" parameterType="String">
+        delete from SCLLDCXD where Name = #{name}
+    </delete>
+
+    <delete id="deleteSCLLDCXDByNames" parameterType="String">
+        delete from SCLLDCXD where Name in
+        <foreach item="name" collection="array" open="(" separator="," close=")">
+            #{name}
+        </foreach>
+    </delete>
+</mapper>
