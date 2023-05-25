@@ -11,10 +11,13 @@
       </el-form-item>
       <el-form-item label="单据日期" prop="businessdate">
         <el-date-picker clearable
-          v-model="queryParams.businessdate"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="单据日期">
+          v-model="businessdate"
+          type="daterange"
+          format="yyyy-MM-dd"
+          value-format="yyyyMMdd"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="出库单号" prop="docno">
@@ -229,68 +232,50 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="SCLLDCXDList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="单据类型" align="center" prop="name" />
-      <el-table-column label="单据日期" align="center" prop="businessdate" width="180">
-        <template slot-scope="scope">
+    <vxe-table v-loading="loading" :data="SCLLDCXDList" @selection-change="handleSelectionChange" 
+    :row-config="{isHover: true}" stripe border :column-config="{resizable: true}" height="800">
+     <vxe-column type="seq" title="序号" width="60"></vxe-column>
+     <vxe-column field="name" title="单据类型" width="120"></vxe-column>
+     <vxe-column field="businessdate" title="单据日期" width="140">
+      <template slot-scope="scope">
           <span>{{ parseTime(scope.row.businessdate, '{y}-{m}-{d}') }}</span>
         </template>
-      </el-table-column>
-      <el-table-column label="领料标识" align="center" prop="issuetype" />
-      <el-table-column label="出库单号" align="center" prop="docno" />
-      <el-table-column label="制单人" align="center" prop="createdby" />
-      <el-table-column label="仓库编码" align="center" prop="whcode" />
-      <el-table-column label="部门编码" align="center" prop="deptcode" />
-      <el-table-column label="部门名称" align="center" prop="deptname" />
-      <el-table-column label="料号" align="center" prop="itemcode" />
-      <el-table-column label="品名" align="center" prop="itemname" />
-      <el-table-column label="规格" align="center" prop="specs" />
-      <el-table-column label="单位" align="center" prop="uom" />
-      <el-table-column label="出库数量" align="center" prop="issuedqty" />
-      <el-table-column label="生产订单号" align="center" prop="modocno" />
-      <el-table-column label="批号" align="center" prop="lotmaster" />
-      <el-table-column label="流水线号" align="center" prop="lsxh" />
-      <el-table-column label="项目号" align="center" prop="projectcode" />
-      <el-table-column label="产品编码" align="center" prop="productcode" />
-      <el-table-column label="状态" align="center" prop="docstate" />
-      <el-table-column label="审核人" align="center" prop="approveby" />
-      <el-table-column label="确认日期" align="center" prop="businesscreatedon" width="180">
-        <template slot-scope="scope">
+     </vxe-column>
+     <vxe-column field="issuetype" title="领料标识" width="100"></vxe-column>
+     <vxe-column field="docno" title="出库单号" width="140"></vxe-column> 
+     <vxe-column field="createdby" title="制单人" width="100"></vxe-column>
+     <vxe-column field="whcode" title="仓库编码" width="80"></vxe-column>
+     <vxe-column field="deptcode" title="部门编码" width="120"></vxe-column>
+     <vxe-column field="deptname" title="部门名称" width="120"></vxe-column>
+     <vxe-column field="itemcode" title="料号" width="140"></vxe-column>
+     <vxe-column field="itemname" title="品名" width="140"></vxe-column>
+     <vxe-column field="specs" title="规格" width="140"></vxe-column>
+     <vxe-column field="uom" title="单位" width="80"></vxe-column>
+     <vxe-column field="issuedqty" title="出库数量" width="100"></vxe-column>
+     <vxe-column field="modocno" title="生产订单号" width="140"></vxe-column>
+     <vxe-column field="lotmaster" title="批号" width="160"></vxe-column>
+     <vxe-column field="lsxh" title="流水线号" width="100"></vxe-column>
+     <vxe-column field="projectcode" title="产品编码" width="140"></vxe-column>
+     <vxe-column field="docstate" title="状态" width="100"></vxe-column>
+     <vxe-column field="approveby" title="审核人" width="100"></vxe-column>
+     <vxe-column field="businesscreatedon" title="确认日期" width="140">
+      <template slot-scope="scope">
           <span>{{ parseTime(scope.row.businesscreatedon, '{y}-{m}-{d}') }}</span>
         </template>
-      </el-table-column>
-      <el-table-column label="发料确认日期" align="center" prop="issueitemon" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.issueitemon, '{y}-{m}-{d}') }}</span>
+     </vxe-column>
+     <vxe-column field="issueitemon" title="发料确认日期" width="160">
+      <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.issueitemon, '{y}/{m}/{d} {h}:{i}:{s}') }}</span>
         </template>
-      </el-table-column>
-      <el-table-column label="行实际发料时间" align="center" prop="actualissuedate" width="180">
-        <template slot-scope="scope">
+     </vxe-column>
+     <vxe-column field="actualissuedate" title="行实际发料时间" width="140">
+      <template slot-scope="scope">
           <span>{{ parseTime(scope.row.actualissuedate, '{y}-{m}-{d}') }}</span>
         </template>
-      </el-table-column>
-      <el-table-column label="财务分类名称" align="center" prop="cwcategory" />
-      <el-table-column label="生产订单单据类型" align="center" prop="modoctype" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:SCLLDCXD:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['system:SCLLDCXD:remove']"
-          >删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+     </vxe-column>
+     <vxe-column field="cwcategory" title="财务分类名称" width="120"></vxe-column>
+     <vxe-column field="modoctype" title="生产订单单据类型" width="140"></vxe-column>
+    </vxe-table>
 
 
     
@@ -313,7 +298,7 @@ export default {
   data() {
     return {
       // 遮罩层
-      loading: true,
+      loading: false,
       // 选中数组
       ids: [],
       // 非单个禁用
@@ -333,7 +318,7 @@ export default {
       // 查询参数
       queryParams: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 20,
         name: null,
         businessdate: null,
         issuetype: null,
@@ -364,16 +349,20 @@ export default {
       form: {},
       // 表单校验
       rules: {
-      }
+      },
+      // 查询单据日期
+      businessdate: ['20230401','20230402']
     };
   },
   created() {
-    this.getList();
+    //this.getList();
   },
   methods: {
     /** 查询生产领料单查询D列表 */
     getList() {
       this.loading = true;
+      this.queryParams.businessdatebeg=this.businessdate[0];
+      this.queryParams.businessdateend=this.businessdate[1];
       listSCLLDCXD(this.queryParams).then(response => {
         this.SCLLDCXDList = response.rows;
         this.total = response.total;
@@ -431,52 +420,6 @@ export default {
       this.ids = selection.map(item => item.name)
       this.single = selection.length!==1
       this.multiple = !selection.length
-    },
-    /** 新增按钮操作 */
-    handleAdd() {
-      this.reset();
-      this.open = true;
-      this.title = "添加生产领料单查询D";
-    },
-    /** 修改按钮操作 */
-    handleUpdate(row) {
-      this.reset();
-      const name = row.name || this.ids
-      getSCLLDCXD(name).then(response => {
-        this.form = response.data;
-        this.open = true;
-        this.title = "修改生产领料单查询D";
-      });
-    },
-    /** 提交按钮 */
-    submitForm() {
-      this.$refs["form"].validate(valid => {
-        if (valid) {
-          if (this.form.name != null) {
-            updateSCLLDCXD(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            });
-          } else {
-            addSCLLDCXD(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            });
-          }
-        }
-      });
-    },
-    /** 删除按钮操作 */
-    handleDelete(row) {
-      const names = row.name || this.ids;
-      this.$modal.confirm('是否确认删除生产领料单查询D编号为"' + names + '"的数据项？').then(function() {
-        return delSCLLDCXD(names);
-      }).then(() => {
-        this.getList();
-        this.$modal.msgSuccess("删除成功");
-      }).catch(() => {});
     },
     /** 导出按钮操作 */
     handleExport() {

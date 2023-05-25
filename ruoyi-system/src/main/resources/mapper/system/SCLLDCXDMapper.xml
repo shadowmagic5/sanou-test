@@ -37,7 +37,7 @@
                uom, IssuedQty, modocno, LotMaster, lsxh, projectcode, productcode, docstate, ApproveBy,
                BusinessCreatedOn, IssueItemOn, ActualIssueDate, cwCategory, modoctype
         from
-            ( SELECT TOP 1
+            ( SELECT
 		c1.Name,
                       CONVERT(DATE, a.BusinessDate, 110) businessdate,
                      CASE a.IssueType
@@ -61,7 +61,7 @@
                      g.Name itemname,
                      g.SPECS,
                      h.ShortName uom,
-                     b.IssuedQty,
+                     CONVERT(FLOAT,b.IssuedQty)IssuedQty,
                      e.DocNo modocno,
                      b.LotMaster,
                      k.Name lsxh,
@@ -132,7 +132,7 @@
         <include refid="selectSCLLDCXDVo"/>
         <where>
             <if test="name != null  and name != ''"> and Name like concat('%', #{name}, '%')</if>
-            <if test="businessdate != null "> and businessdate = #{businessdate}</if>
+            <if test="businessdatebeg != null "> and businessdate between #{businessdatebeg} and #{businessdateend}</if>
             <if test="issuetype != null  and issuetype != ''"> and issuetype = #{issuetype}</if>
             <if test="docno != null  and docno != ''"> and DocNo = #{docno}</if>
             <if test="createdby != null  and createdby != ''"> and CreatedBy = #{createdby}</if>

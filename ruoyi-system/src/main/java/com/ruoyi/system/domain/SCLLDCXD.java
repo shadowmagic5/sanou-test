@@ -27,6 +27,10 @@ public class SCLLDCXD extends BaseEntity
     @Excel(name = "单据日期")
     private Date businessdate;
 
+    private String businessdatebeg;
+
+    private String businessdateend;
+
     /** $column.columnComment */
     @Excel(name = "领料标识")
     private String issuetype;
