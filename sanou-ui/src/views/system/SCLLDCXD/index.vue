@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    <!-- 查询条件 -->
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="单据类型" prop="name">
         <el-input
@@ -42,7 +43,7 @@
           placeholder="仓库编码"
           clearable
           @keyup.enter.native="handleQuery"
-        />
+        ><i slot="suffix" class="el-input__icon el-icon-search" @click="whSwitch=true"></i></el-input>
       </el-form-item>
       <el-form-item label="部门编码" prop="deptcode">
         <el-input
@@ -193,7 +194,6 @@
           plain
           icon="el-icon-plus"
           size="mini"
-          @click="handleAdd"
           v-hasPermi="['system:SCLLDCXD:add']"
         >新增</el-button>
       </el-col>
@@ -204,7 +204,6 @@
           icon="el-icon-edit"
           size="mini"
           :disabled="single"
-          @click="handleUpdate"
           v-hasPermi="['system:SCLLDCXD:edit']"
         >修改</el-button>
       </el-col>
@@ -215,7 +214,6 @@
           icon="el-icon-delete"
           size="mini"
           :disabled="multiple"
-          @click="handleDelete"
           v-hasPermi="['system:SCLLDCXD:remove']"
         >删除</el-button>
       </el-col>
@@ -232,6 +230,7 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
+    <!-- 查询结果 -->
     <vxe-table v-loading="loading" :data="SCLLDCXDList" @selection-change="handleSelectionChange" 
     :row-config="{isHover: true}" stripe border :column-config="{resizable: true}" height="800">
      <vxe-column type="seq" title="序号" width="60"></vxe-column>
@@ -287,14 +286,19 @@
       @pagination="getList"
     />
 
+    <!-- 弹出窗口 -->
+    <whList :showDialog="whSwitch" @dialogClose="whSwitch=false"></whList>
+
   </div>
 </template>
 
 <script>
 import { listSCLLDCXD, getSCLLDCXD } from "@/api/system/SCLLDCXD";
+import whList from '@/components/SearchResult/WhList.vue';
 
 export default {
   name: "SCLLDCXD",
+  components: {whList},
   data() {
     return {
       // 遮罩层
@@ -351,7 +355,9 @@ export default {
       rules: {
       },
       // 查询单据日期
-      businessdate: ['20230401','20230402']
+      businessdate: ['20230401','20230402'],
+      // 存储地点查询条件显示开关
+      whSwitch : false
     };
   },
   created() {
