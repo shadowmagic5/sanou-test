@@ -2,14 +2,7 @@
   <div class="app-container">
     <!-- 查询条件 -->
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="单据类型" prop="name">
-        <el-input
-          v-model="queryParams.name"
-          placeholder="单据类型"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+
       <el-form-item label="单据日期" prop="businessdate">
         <el-date-picker clearable
           v-model="businessdate"
@@ -21,165 +14,13 @@
           end-placeholder="结束日期">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="出库单号" prop="docno">
-        <el-input
-          v-model="queryParams.docno"
-          placeholder="出库单号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="制单人" prop="createdby">
-        <el-input
-          v-model="queryParams.createdby"
-          placeholder="制单人"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="仓库编码" prop="whcode">
         <el-input
           v-model="queryParams.whcode"
           placeholder="仓库编码"
           clearable
           @keyup.enter.native="handleQuery"
-        ><i slot="suffix" class="el-input__icon el-icon-search" @click="whSwitch=true"></i></el-input>
-      </el-form-item>
-      <el-form-item label="部门编码" prop="deptcode">
-        <el-input
-          v-model="queryParams.deptcode"
-          placeholder="部门编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="部门名称" prop="deptname">
-        <el-input
-          v-model="queryParams.deptname"
-          placeholder="部门名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="料号" prop="itemcode">
-        <el-input
-          v-model="queryParams.itemcode"
-          placeholder="料号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="品名" prop="itemname">
-        <el-input
-          v-model="queryParams.itemname"
-          placeholder="品名"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="规格" prop="specs">
-        <el-input
-          v-model="queryParams.specs"
-          placeholder="规格"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="单位" prop="uom">
-        <el-input
-          v-model="queryParams.uom"
-          placeholder="单位"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="生产订单号" prop="modocno">
-        <el-input
-          v-model="queryParams.modocno"
-          placeholder="生产订单号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="批号" prop="lotmaster">
-        <el-input
-          v-model="queryParams.lotmaster"
-          placeholder="批号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="流水线号" prop="lsxh">
-        <el-input
-          v-model="queryParams.lsxh"
-          placeholder="流水线号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="项目号" prop="projectcode">
-        <el-input
-          v-model="queryParams.projectcode"
-          placeholder="项目号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="产品编码" prop="productcode">
-        <el-input
-          v-model="queryParams.productcode"
-          placeholder="产品编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="状态" prop="docstate">
-        <el-input
-          v-model="queryParams.docstate"
-          placeholder="状态"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="审核人" prop="approveby">
-        <el-input
-          v-model="queryParams.approveby"
-          placeholder="审核人"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="确认日期" prop="businesscreatedon">
-        <el-date-picker clearable
-          v-model="queryParams.businesscreatedon"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="确认日期">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="发料确认日期" prop="issueitemon">
-        <el-date-picker clearable
-          v-model="queryParams.issueitemon"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="发料确认日期">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="行实际发料时间" prop="actualissuedate">
-        <el-date-picker clearable
-          v-model="queryParams.actualissuedate"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="行实际发料时间">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="财务分类名称" prop="cwcategory">
-        <el-input
-          v-model="queryParams.cwcategory"
-          placeholder="生产订单单据类型"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        ><i slot="suffix" class="el-input__icon el-icon-search" @click="showDialog()"></i></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -287,7 +128,7 @@
     />
 
     <!-- 弹出窗口 -->
-    <whList :showDialog="whSwitch" @dialogClose="whSwitch=false"></whList>
+    <whList :showDialog="whSwitch" @dialogClose="whSwitch = false"></whList>
 
   </div>
 </template>
@@ -432,6 +273,10 @@ export default {
       this.download('system/SCLLDCXD/export', {
         ...this.queryParams
       }, `SCLLDCXD_${new Date().getTime()}.xlsx`)
+    },
+    //弹出对话框
+    showDialog(){
+      this.whSwitch=true;
     }
   }
 };
